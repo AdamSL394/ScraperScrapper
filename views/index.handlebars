@@ -53,45 +53,7 @@
 
 <script type="text/javascript">
 
-    $("#createplan").on("submit", function (event) {
-        event.preventDefault();
-
-        var newPlayer = {
-            player: $("#createplan [name=plan]").val()
-
-        }
-
-
-        console.log(newPlayer);
-        $.ajax("/api/new", {
-            type: "POST",
-            data: newPlayer
-        }).then(function () {
-            console.log("created a new player");
-            location.reload();
-        });
-
-    })
-
-    $(".trade").on("click", function (event) {
-        var id = $(this).data("id")
-        var bench = $(this).data("trade")
-        var tradeStatus = {
-            trade: bench
-
-        };
-        console.log(tradeStatus);
-
-
-        $.ajax("/api/player/" + id, {
-            type: "PUT",
-            data: tradeStatus
-        }).then(function () {
-            console.log("This data trade below")
-            console.log($(this).data("trade"))
-            location.reload();
-
-        })
-    })
-
+     $("#submit").on("click",function(req,res){
+         
+     })
 </script>
