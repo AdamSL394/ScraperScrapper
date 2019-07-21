@@ -1,0 +1,97 @@
+<h1>Make Your Dream Team!</h1>
+
+<h2> Player on team</h2>
+
+ <span class="set">
+        <span id="red"></span>
+        <span id="black"></span>
+        <span id="cyan"></span>
+        <span id="green"></span>
+        <span id="yellow"></span>
+    </span>
+
+<ul>
+    {{#each burgers}}
+    {{#unless trade}}
+    <li>
+        {{this.id}}.
+        {{this.player_name}}
+        {{>player/player-block trade=true}}
+        {{!-- <button class="trade" data-trade="{{trade}}" data-id="{{id}}">
+            {{#if trade }}TRADE!{{else}}KEEP!{{/if}}
+        </button> --}}
+    </li>
+    {{/unless }}
+    {{/each}}
+</ul>
+
+
+<h2>Player traded</h2>
+
+<ul>
+    {{#each burgers}}
+    {{#if trade}}
+    <li>
+        {{this.id}}.
+        {{this.player_name}}
+        {{!-- {{>player/player-block trade=false}} Comment out to only have one button for players --}}
+    
+    </li>
+    {{/if }}
+    {{/each}}
+</ul>
+
+<form id="createplan" class="button-size">
+
+    <textarea type="text" name="plan"></textarea>
+    <button type="submit">Add Player!</button>
+
+
+
+
+</form>
+
+<script type="text/javascript">
+
+    $("#createplan").on("submit", function (event) {
+        event.preventDefault();
+
+        var newPlayer = {
+            player: $("#createplan [name=plan]").val()
+
+        }
+
+
+        console.log(newPlayer);
+        $.ajax("/api/new", {
+            type: "POST",
+            data: newPlayer
+        }).then(function () {
+            console.log("created a new player");
+            location.reload();
+        });
+
+    })
+
+    $(".trade").on("click", function (event) {
+        var id = $(this).data("id")
+        var bench = $(this).data("trade")
+        var tradeStatus = {
+            trade: bench
+
+        };
+        console.log(tradeStatus);
+
+
+        $.ajax("/api/player/" + id, {
+            type: "PUT",
+            data: tradeStatus
+        }).then(function () {
+            console.log("This data trade below")
+            console.log($(this).data("trade"))
+            location.reload();
+
+        })
+    })
+
+</script>
