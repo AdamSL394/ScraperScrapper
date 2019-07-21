@@ -21,7 +21,7 @@ $(".databaseInformation").empty();
         
         for( var i = 0; i < data.length; i++){
 
-            $(".databaseInformation").append("data-attr" + data[i]._id +"<li>" + data[i].text + "</li>"  + "<li>" +`<a href='youtube.com${data[i].link}'>` + "Watch on Youtube!"+"</li>" );
+            $(".databaseInformation").append("<li data-id='" + data[i]._id + "'>" + data[i].text + "</li>"  + "<li>" +`<a href='youtube.com${data[i].link}'>` + "Watch on Youtube!"+"</li>" + "<br/>" );
         }
     });
 
