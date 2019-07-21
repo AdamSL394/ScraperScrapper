@@ -1,61 +1,31 @@
-<h1>Make Your Dream Team!</h1>
+<h1>Youtube</h1>
 
-<h2> Player on team</h2>
-
- <span class="set">
-        <span id="red"></span>
-        <span id="black"></span>
-        <span id="cyan"></span>
-        <span id="green"></span>
-        <span id="yellow"></span>
-    </span>
 
 <ul>
-    {{#each burgers}}
-    {{#unless trade}}
+    {{#each data}}
+    {{!-- {{#if trade}} --}}
     <li>
-        {{this.id}}.
-        {{this.player_name}}
-        {{>player/player-block trade=true}}
-        {{!-- <button class="trade" data-trade="{{trade}}" data-id="{{id}}">
-            {{#if trade }}TRADE!{{else}}KEEP!{{/if}}
-        </button> --}}
+        {{data.text}}
     </li>
-    {{/unless }}
+    {{!-- {{/if }} --}}
     {{/each}}
 </ul>
 
-
-<h2>Player traded</h2>
-
-<ul>
-    {{#each burgers}}
-    {{#if trade}}
-    <li>
-        {{this.id}}.
-        {{this.player_name}}
-        {{!-- {{>player/player-block trade=false}} Comment out to only have one button for players --}}
-    
-    </li>
-    {{/if }}
-    {{/each}}
-</ul>
-
-<form id="createplan" class="button-size">
-
-    <textarea type="text" name="plan"></textarea>
-    <button type="submit">Add Player!</button>
-
-
-
-
-</form>
+<p class= "databaseInformation">
 
 <script type="text/javascript">
 
-    $.getJSON("/scrape", function(data){
+$(".databaseInformation").empty();
+
+    $.getJSON("/articles", function(data){
+        
         for( var i = 0; i < data.length; i++){
-            $("#createplan").append(data[i.title]);
+
+            $(".databaseInformation").append("data-attr" + data[i]._id +"<li>" + data[i].text + "</li>"  + "<li>" +`<a href='youtube.com${data[i].link}'>` + "Watch on Youtube!"+"</li>" );
         }
-    })
+    });
+
+$("p").on("click",function(req,res){
+    console.log("I'm going to make a form!")
+})
 </script>

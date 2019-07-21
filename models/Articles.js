@@ -3,7 +3,7 @@ var mongoose = require("mongoose")
 var Schema = mongoose.Schema;
 
 var ArticleSchema = new Schema({
-    title:{
+    text:{
         type:String,
         require:true
     },

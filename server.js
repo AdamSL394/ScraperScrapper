@@ -48,7 +48,7 @@ app.get("/scrape", function (req, res) {
       result.text= $(this).children("a").text()
 
 
-      // console.log(result.text);
+      console.log(result.text);
       // console.log(result.link);
 
       db.Articles.create(result)
