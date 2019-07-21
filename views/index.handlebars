@@ -53,7 +53,9 @@
 
 <script type="text/javascript">
 
-     $("#submit").on("click",function(req,res){
-         
-     })
+    $.getJSON("/scrape", function(data){
+        for( var i = 0; i < data.length; i++){
+            $("#createplan").append(data[i.title]);
+        }
+    })
 </script>

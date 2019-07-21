@@ -30,11 +30,6 @@ var routes = require("./controllers/scraper.js")
 app.use(routes);
 
 
-
-
-
-
-
 mongoose.connect("mongodb://localhost/unit18Populater", { useNewUrlParser: true });
 
 app.get("/scrape", function (req, res) {
@@ -44,9 +39,6 @@ app.get("/scrape", function (req, res) {
  
     var $ = cheerio.load(response.data);
 
-   
-
-    
     $('h3, #video-title').each(function (i, element) {
 
 
@@ -56,8 +48,8 @@ app.get("/scrape", function (req, res) {
       result.text= $(this).children("a").text()
 
 
-      console.log(result.text);
-      console.log(result.link);
+      // console.log(result.text);
+      // console.log(result.link);
 
       db.Articles.create(result)
       .then(function(dbArticles){
@@ -67,10 +59,21 @@ app.get("/scrape", function (req, res) {
         console.log(err);
       })
     })
-    res.send("Scrape Complete");
-  })
-})
+    // res.json(dbArticles);
+    res.send("Scrapper Scrapper!")
+  });
+});
 
+app.get("/articles",function(req,res){
+  db.Articles.find({}).then(function(dbArticles){
+    res.send(dbArticles)
+  })
+  .catch(function(err){
+    if(err){
+      res.send(err);
+    }
+  });
+});
 
 
 // Start the server
