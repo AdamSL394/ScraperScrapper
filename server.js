@@ -75,6 +75,21 @@ app.get("/articles",function(req,res){
   });
 });
 
+app.get("/articles/:id",function(req,res){
+  db.Articles.findOne({_id: mongoose.Types.ObjectId(req.params.id)})
+  .then(function(dbArticles){
+    res.json(dbArticles);
+  })
+  .catch(function(err){
+    res.json(err);
+  })
+})
+
+app.get("/articles/:id",function (req,res){
+  db.Articles.findOneandUpdate({_id:req.params.id}, {node: dbNotes._id}, {new:true});
+}).then(function)
+app.get("./index")
+
 
 // Start the server
 app.listen(PORT, function () {

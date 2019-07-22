@@ -11,21 +11,52 @@
     {{/each}}
 </ul>
 
-<p class= "databaseInformation">
+<div class="notes">Notes Go Here </div>
+
+<div class="databaseInformation"></div>
 
 <script type="text/javascript">
 
-$(".databaseInformation").empty();
 
-    $.getJSON("/articles", function(data){
-        
-        for( var i = 0; i < data.length; i++){
+    $(".databaseInformation").empty();
 
-            $(".databaseInformation").append("<li data-id='" + data[i]._id + "'>" + data[i].text + "</li>"  + "<li>" +`<a href='youtube.com${data[i].link}'>` + "Watch on Youtube!"+"</li>" + "<br/>" );
+    $.getJSON("/articles", function (data) {
+
+        for (var i = 0; i < data.length; i++) {
+
+            $(".databaseInformation").append("<p data-id='" + data[i]._id + "'>" + data[i].text + "</p>" + "<li>" + `<a href='youtube.com${data[i].link}'>` + "Watch on Youtube!" + "</li>" + "<br/>");
         }
+
     });
 
-$("p").on("click",function(req,res){
-    console.log("I'm going to make a form!")
-})
+    $(document).on("click", "p", function () {
+        var idTag = $(this).attr("data-id")
+        var nameTag = $(this).text()
+      //  console.log(nameTag)
+        //console.log(idTag)
+        $.ajax({
+            method: "GET",
+            url: "/articles/" + idTag
+        }).then(function (data) {
+            console.log(data)
+            $(".notes").empty();
+            var noteTitle = $('<h2>' + nameTag + '</h2>').addClass("title");
+            var noteForum = $("<input>")
+            var noteBody = $(" <textarea> </textarea>").addClass("textBody")
+            var submitButton = $("<button data-id='" + data._id + "' id='savenote'>submit</button>")//.addClass("submit") why cant I use back ticks
+            $(".notes").append(noteTitle, noteBody, submitButton);
+        });
+    });
+
+    $(document).on("click", "#savenote", function () {
+        var idTag = $(this).attr("data-id")
+        console.log(idTag)
+        var notes = $(".textBody").val()
+        $.ajax({
+            method: "POST",
+            url: "/articles/" + idTag
+        }).then(function (data) {
+            //console.log(data);
+        });
+    });
 </script>
