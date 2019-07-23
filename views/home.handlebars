@@ -1,0 +1,80 @@
+<h1>Youtube</h1>
+<button id="scrape" class="btn">scrape</button>
+{{> header}}
+<ul>
+    {{#each articles}}
+    {{!-- {{#unless  this.saved}} --}}
+    <div class="articleWarp">
+        <p>{{this.text}}</p>
+        <a href="http://youtube.com{{this.link}}" target="_blank"> View link</a>
+        <button class="saved" data-aid={{this._id}}>Save</button>
+    </div>
+    {{!-- {{/unless }} --}}
+    {{/each}}
+</ul>
+
+
+{{!-- {{#unless articles}} --}}
+<h3>No Articles Saved Yet</h3>
+{{!-- {{/unless}} --}}
+
+<div class="notes">Notes Go Here </div>
+
+
+<script type="text/javascript">
+
+    $("#scrape").on("click", function () {
+        $(".databaseInformation").empty();
+        $.get("/scrape", function (response) {
+        });
+    })
+
+    $(document).on("click", "p", function () {
+        var idTag = $(this).attr("data-id")
+        var nameTag = $(this).text()
+        $.ajax({
+            method: "GET",
+            url: "/articles/" + idTag
+        }).then(function (data) {
+            console.log(data)
+            $(".notes").empty();
+            var noteTitle = $('<h2>' + nameTag + '</h2>').addClass("title");
+            var noteForum = $("<input>").addClass("titleEntry")
+            var noteBody = $(" <textarea> </textarea>").addClass("textBody")
+            var submitButton = $("<button data-id='" + data._id + "' id='savenote'>submit</button>")//.addClass("submit") why cant I use back ticks
+            $(".notes").append(noteTitle, noteForum, noteBody, submitButton);
+        });
+    });
+
+
+    $(".saved").on("click", function () {
+            var articleId = $(this).data("aid");
+
+            var updateArticle = {
+                saved: true
+            }
+      
+            $.ajax({
+                method: "PUT",
+                url: "/articles/" + articleId,
+                saved: updateArticle,
+                sucess: function (result) {
+                    var parentElm = $(this).parent(".articleWarp")
+                    parentElm.remove();
+                }
+                // $(document).on("click", "#savenote", function () {
+                //var idTag = $(this).attr("data-id")
+                //var header = $(".titleEntry").val()
+                //var notes = $(".textBody").val()
+                // $.ajax({
+                //    method: "POST",
+                //  url: "/articles/" + idTag,
+                //     title: header,
+                //      body: notes
+                // }).then(function (data) {
+                //console.log(data);
+                //  });
+                // });
+        })
+    })
+</script>

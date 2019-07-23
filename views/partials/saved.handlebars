@@ -1,0 +1,72 @@
+{{> header home=false saved=true}}
+
+<style>
+ .hide{
+     display: none;
+ }
+</style>
+
+
+
+
+{{#each articles}}
+{{#if true}}
+
+<div class ="article-wrap" data-a="{{this._id}}">
+    <p>{{this.title}}</p>
+    <a href="{{this.link}}">Article Link</a>
+    <button class="unsave" data-aid="{{this._id}}"> Unsave </button>
+    {{#if note}}
+    <div class="note-wrap" data-nid="{{this._id}}">
+        <p class="note-title">{{this.title}}</p>
+        <p class="note-body">{{this.body}}</p>
+        <button class="update-btn">Update</button>
+        <button class="delete-btn">Delete</button>
+    </div>
+
+
+  
+
+
+    {{/else}}
+    <button class="add-btn">add a note</button>
+    {{/if}}
+</div>
+
+
+{{/if }}
+{{/each }}
+
+  <div class="note-wrap hide" data-nid="" data-aid="">
+       <form class="note-form">
+           <input type="text" id="title">
+           <textarea id="body"></textarea>
+           <button class="update-note">Save</button>
+       </form>
+    </div>
+
+
+{{#unless articles}}
+<h2>Nosaved Articles</h2>
+<a href="/">Go Home </a>
+{{/unless}}
+
+<script>
+
+      $(".unsave").on("click", function () {
+
+        var articleId = $(this).data("aid");
+        var updateArticle = {
+            saved: false
+        }
+        $.ajax({
+            method: "PUT",
+            url: "/articles/" + articleId,
+            sucess: function (result) {
+                var parentElm = $(this).parent(".articleWarp")
+                parentElm.remove();
+            }
+
+        })
+    })
+</script>
