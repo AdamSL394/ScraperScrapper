@@ -76,9 +76,9 @@ app.get("/", function (req, res) {
 });
 
 app.get("/saved", function (req, res) {
-  db.Articles.find({}).then(function (dbArticles) {
+  db.Articles.find({saved:true}).then(function (dbArticles) {
     res.render("saved",{
-      articles: articles
+      articles: dbArticles
     })
   })
     .catch(function (err) {
@@ -114,10 +114,10 @@ app.post("/articles/:id", function (req, res) {
 });
 
 app.put("/articles/:id",function(req,res){
-  db.Articles.findOneandUpdate({ _id: req.params.id}, req.body)
+  db.Articles.findOneAndUpdate({ _id: req.params.id}, req.body)
     .then(function (dbArticles) {
-      
-      res.json(dbArticles);
+      console.log(dbArticles);
+      res.json(true);
     })
     .catch(function (err) {
       res.json(err);
