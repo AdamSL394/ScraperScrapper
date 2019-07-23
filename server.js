@@ -14,7 +14,7 @@ mongoose.connect(MONGODB_URI,{ useNewUrlParser: true });
 
 // var db = require("./models")
 
-var PORT = 3000;
+var PORT = process.env.PORT || 3000;
 
 
 var app = express();
