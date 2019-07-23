@@ -5,6 +5,10 @@ var axios = require("axios");
 var cheerio = require("cheerio");
 var exphbs = require("express-handlebars");
 
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/unit18Populater";
+
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+
 
 var db = require("./models")
 
@@ -27,7 +31,7 @@ app.set("view engine", "handlebars");
 
 // var routes = require("./controllers/scraper.js")
 
-mongoose.connect("mongodb://localhost/unit18Populater", { useNewUrlParser: true });
+// mongoose.connect("mongodb://localhost/unit18Populater", { useNewUrlParser: true });
 
 app.get("/scrape", function (req, res) {
 
