@@ -28,22 +28,6 @@
         });
     })
 
-    $(document).on("click", "p", function () {
-        var idTag = $(this).attr("data-id")
-        var nameTag = $(this).text()
-        $.ajax({
-            method: "GET",
-            url: "/articles/" + idTag
-        }).then(function (data) {
-            console.log(data)
-            $(".notes").empty();
-            var noteTitle = $('<h2>' + nameTag + '</h2>').addClass("title");
-            var noteForum = $("<input>").addClass("titleEntry")
-            var noteBody = $(" <textarea> </textarea>").addClass("textBody")
-            var submitButton = $("<button data-id='" + data._id + "' id='savenote'>submit</button>")//.addClass("submit") why cant I use back ticks
-            $(".notes").append(noteTitle, noteForum, noteBody, submitButton);
-        });
-    });
 
     $(".saved").on("click", function () {
             var articleId = $(this).data("aid");

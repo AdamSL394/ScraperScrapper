@@ -59,9 +59,9 @@ app.get("/scrape", function (req, res) {
 
 
 app.get("/", function (req, res) {
-  console.log("test")
+ 
   db.Articles.find({}).then(function (dbArticles) {
-    console.log("home", dbArticles)
+
 
     res.render("home",{
      
@@ -76,7 +76,10 @@ app.get("/", function (req, res) {
 });
 
 app.get("/saved", function (req, res) {
-  db.Articles.find({saved:true}).then(function (dbArticles) {
+  db.Articles.find({id:req.params.id})
+  .populate("note")
+  .then(function (dbArticles) { 
+    console.log("this is the saved note", dbArticles)
     res.render("saved",{
       articles: dbArticles
     })
@@ -88,10 +91,15 @@ app.get("/saved", function (req, res) {
     });
 });
 
+app.get("/notes/:id",function(req,res){
+  db.Note.findOne({id:req.params.id})
+  .then(function(dbNote){
+ console.log(" this is the database note",dbnote);
+  })
+})
 
 app.get("/articles/:id", function (req, res) {
   db.Articles.findOne({ _id: req.params.id })
-  .populate("Notes")
     .then(function (dbArticles) {
       res.json(dbArticles);
     })
@@ -100,18 +108,6 @@ app.get("/articles/:id", function (req, res) {
     })
 })
 
-app.post("/articles/:id", function (req, res) {
-  db.Notes.create(req.body).then(function(){
-    console.log("this is the request.body on the server side", )
-    console.log(req.body)
-    return db.Articles.findOneandUpdate({ _id: req.params.id }, { node: dbNotes._id }, { new: true });
-  }).then(function (dbArticle) {
-    res.json(dbArticle);
-  })
-    .catch(function (err) {
-      res.json(err);
-    })
-});
 
 app.put("/articles/:id",function(req,res){
   db.Articles.findOneAndUpdate({ _id: req.params.id}, req.body)
@@ -124,6 +120,20 @@ app.put("/articles/:id",function(req,res){
     })
 })
 
+app.post("/article/:id/note", function (req, res) {
+  db.Note.create(req.body)
+  .then(function(dbNote){
+    console.log("dbNote", dbNote)
+    return db.Articles.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
+  })
+  .then(function (dbArticles) {
+    console.log("dbArtihicle", dbArticles)
+    // res.json(dbArticles);
+  })
+    .catch(function (err) {
+      res.json(err);
+    })
+});
 
 // Start the server
 app.listen(PORT, function () {
