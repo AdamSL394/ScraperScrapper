@@ -92,15 +92,19 @@ app.get("/saved", function (req, res) {
 });
 
 app.get("/notes/:id",function(req,res){
-  db.Note.findOne({id:req.params.id})
+  db.Note.findOne({_id:req.params.id})
   .then(function(dbNote){
- console.log(" this is the database note",dbnote);
+ res.json(dbNote);
+  })
+  .catch(function(err){
+    res.json(err);
   })
 })
 
 app.get("/articles/:id", function (req, res) {
   db.Articles.findOne({ _id: req.params.id })
     .then(function (dbArticles) {
+      console.log("this is the db article",dbArticles);
       res.json(dbArticles);
     })
     .catch(function (err) {

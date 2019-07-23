@@ -40,18 +40,24 @@
 {{#if saved}}
 
 <div class="article-wrap" data-aid="{{this._id}}">
-    <p>{{this.text}}</p>
+    <p class="text">{{this.text}}</p>
     <a href="{{this.link}}">Article Link</a>
     <button class="unsave-btn" data-aid="{{this._id}}"> Unsave </button>
     {{#unless note}}
-        <button class="add-btn" data-aid="{{this._id}}">add a note</button>
+        {{#if addInfo}}
+        <button class="addInfo add-btn" data-aid="{{this._id}}">add a note</button>
+        {{else}}
+         <button class="showStoredNotes">Show note</button>
+         {{/if }}
     {{else}}
+    
     <div class="note-wrap" data-nid="{{this.note._id}}">
         <p class="note-title">{{this.note.title}}</p>
         <p class="note-body">{{this.note.body}}</p>
         <button class="update-btn">Update</button>
         <button class="delete-note">Delete</button>
     </div>
+   
     {{/unless}}
 </div>
 
@@ -59,14 +65,6 @@
 {{/if }}
 {{/each }}
 
-{{!-- <div class="note-wrap hide" data-nid="" data-aid="">
-    <form class="note-form">
-        <input type="text" id="title">
-        <textarea id="body"></textarea>
-        <button class="update-note">Save</button>
-        <button class="canel-note">Cancel</button>
-    </form>
-</div> --}}
 
 
 {{#unless articles}}
@@ -75,6 +73,8 @@
 {{/unless}}
 
 <script>
+
+
 
     $(".unsave-btn").on("click", function () {
         console.log("hi")
@@ -99,6 +99,7 @@
         var articleId = $(this).data("aid")
         $(".note-wrap").attr("data-aid", articleId);
         $(".note-wrap").slideDown("slow");
+
     })
 
     $(".canel-note").on("click", function (e) {
@@ -122,25 +123,33 @@
             body: $(".body").val().trim()
         }
         clearForm();
+        $("")
         console.log(note);
         $.post("/article/"+ articleId +"/note",note, function (res) {
            console.log("this is the response client side", res)
         })
     })
 
-    $(document).on("click", "p", function () {
+    $(".showStoredNotes ").on("click", function () {
+         $(".note-wrap").empty();
         var idTag = $(this).parent(".article-wrap").data("aid")
         var nameTag = $(this).text()
-
-        console.log(idTag);
-        console.log(nameTag);
+        console.log("this is the idtag",idTag);
         $.ajax({
             method: "GET",
-            url: "/notes/" + idTag
+            url: "/articles/" + idTag
         }).then(function (data) {
-            console.log(data)
-            $(".note-wrap").empty();
-            $()
+            var noteId = data.note
+            console.log(noteId)
+            $.ajax({
+                method:"GET",
+                url: "/notes/"+ noteId
+            }).then(function(data){
+                console.log("This should be the note data",data.body)
+                       console.log("This should be the note data",data.title)
+                       var noteBody =$("<div>")
+            })
+            
         })    
     });
 </script>
