@@ -5,7 +5,7 @@
 <ul>
     {{#each articles}}
     {{#unless  this.saved}}
-    <div class="articleWarp">
+    <card class="articleWarp">
         <p>{{this.text}}</p>
         <a href="http://youtube.com{{this.link}}" target="_blank"> View link</a>
         <button class="saved" data-aid={{this._id}}>Save</button>
@@ -25,7 +25,7 @@
     $("#scrape").on("click", function () {
         $(".databaseInformation").empty();
         $.get("/scrape", function (response) {
-        });
+        }) 
     })
 
 

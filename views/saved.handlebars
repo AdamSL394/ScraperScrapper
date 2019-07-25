@@ -4,28 +4,35 @@
     }
 
     .note-wrap {
-        width: 50vw;
-       
+        width: 18rem;
         background: rgba(255, 255, 255, .8);
-        min-height: 100vh;
+        min-height: 10vh;
         text-align: center;
         padding-top: 5%;
         z-index: 999;
-        float:right;
+        top:0%;
+        right:0%;
+        position:absolute;
+        position:fixed;
     }
+
 
     .note-form {
         color: white;
     }
+    .card{
+        width: 18rem;
+        position:relative;
+        background-color:white;
+    }
 </style>
 
-<div class="note-wrap hide" data-nid="" data-aid="">
+<div class="note-wrap hide " data-nid="" data-aid="">
     <form class="note-form">
         <br />
         <input type="text" id="title" required>
-
         <textarea type="text" class="body" required></textarea>
-        <button class="update-note">Save</button>
+        <button class="save-note">Save</button>
         <button class="canel-note">Cancel</button>
     </form>
 </div>
@@ -39,25 +46,25 @@
 {{#each articles}}
 {{#if saved}}
 
-<div class="article-wrap" data-aid="{{this._id}}">
-    <p class="text">{{this.text}}</p>
-    <a href="{{this.link}}">Article Link</a>
-    <button class="unsave-btn" data-aid="{{this._id}}"> Unsave </button>
+<div class="article-wrap card" data-aid="{{this._id}}">
+    <div class="card-body">
+        <p class="text">{{this.text}}</p>
+        <a href="{{this.link}}">Article Link</a>
+        <button class="unsave-btn" data-aid="{{this._id}}"> Unsave </button>
+        <p id="changeTitle"></p>
+        <p id="changeBody"></p>
+    </div>
     {{#unless note}}
-        {{#if addInfo}}
-        <button class="addInfo add-btn" data-aid="{{this._id}}">add a note</button>
-        {{else}}
-         <button class="showStoredNotes">Show note</button>
-         {{/if }}
+    <button class="addInfo add-btn" data-aid="{{this._id}}">add a note</button>
     {{else}}
-    
+    <button class="showStoredNotes" data-aid="{{this._id}}">Show note</button>
     <div class="note-wrap" data-nid="{{this.note._id}}">
         <p class="note-title">{{this.note.title}}</p>
         <p class="note-body">{{this.note.body}}</p>
         <button class="update-btn">Update</button>
         <button class="delete-note">Delete</button>
     </div>
-   
+
     {{/unless}}
 </div>
 
@@ -99,6 +106,7 @@
         var articleId = $(this).data("aid")
         $(".note-wrap").attr("data-aid", articleId);
         $(".note-wrap").slideDown("slow");
+        
 
     })
 
@@ -112,7 +120,7 @@
         $("#title, .body").val("");
     }
 
-    $(".update-note").on("click", function (e) {
+    $(".save-note").on("click", function (e) {
 
         $(".note-form")[0].reportValidity();
         e.preventDefault();
@@ -125,16 +133,17 @@
         clearForm();
         $("")
         console.log(note);
-        $.post("/article/"+ articleId +"/note",note, function (res) {
-           console.log("this is the response client side", res)
+        $.post("/article/" + articleId + "/note", note, function (res) {
+            console.log("this is the response client side", res)
         })
     })
 
     $(".showStoredNotes ").on("click", function () {
-         $(".note-wrap").empty();
+        console.log("this should be the article id zzz", $(this).data("aid"));
+        $(".note-wrap").empty();
         var idTag = $(this).parent(".article-wrap").data("aid")
         var nameTag = $(this).text()
-        console.log("this is the idtag",idTag);
+        console.log("this is the idtag", idTag);
         $.ajax({
             method: "GET",
             url: "/articles/" + idTag
@@ -142,14 +151,15 @@
             var noteId = data.note
             console.log(noteId)
             $.ajax({
-                method:"GET",
-                url: "/notes/"+ noteId
-            }).then(function(data){
-                console.log("This should be the note data",data.body)
-                       console.log("This should be the note data",data.title)
-                       var noteBody =$("<div>")
+                method: "GET",
+                url: "/notes/" + noteId
+            }).then(function (data) {
+                console.log("This should be the note data", data.body)
+                console.log("This should be the note data", data.title)
+                $("#changeTitle").text(data.title)
+                $("#changeBody").text(data.body)
             })
-            
-        })    
+
+        })
     });
 </script>

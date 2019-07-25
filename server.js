@@ -5,10 +5,8 @@ var axios = require("axios");
 var cheerio = require("cheerio");
 var exphbs = require("express-handlebars");
 
-var MONGODB_URI = process.env.MONGODB_URI //|| "mongodb://localhost/unit18Populater";
-// var MONGODB_URI = process.env.MONGODB_URI || "mongodb://heroku_q76zz3z7:ccgdr2eh7oqa1l9db4000q4l8t@ds223756.mlab.com:23756/heroku_q76zz3z7";
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/Broughttoyoutube";
 
-// mongoose.connect(MONGODB_URI,{ useNewUrlParser: true });
 mongoose.connect(MONGODB_URI,{ useNewUrlParser: true });
 
 
@@ -31,9 +29,6 @@ app.use(express.json());
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-// var routes = require("./controllers/scraper.js")
-
-// mongoose.connect("mongodb://localhost/unit18Populater", { useNewUrlParser: true });
 
 app.get("/scrape", function (req, res) {
 
