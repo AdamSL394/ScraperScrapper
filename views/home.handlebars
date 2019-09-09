@@ -1,18 +1,20 @@
 <h1>Youtube</h1>
 <button id="scrape" class="btn">scrape</button>
 
+
+
 {{> header home=true saved=false}}
-<ul>
+{{!-- <ul> --}}
     {{#each articles}}
     {{#unless  this.saved}}
-    <card class="articleWarp">
+    <card class="articleWrap">
         <p>{{this.text}}</p>
         <a href="http://youtube.com{{this.link}}" target="_blank"> View link</a>
         <button class="saved" data-aid={{this._id}}>Save</button>
-    </div>
+    </card>
     {{/unless }}
     {{/each}}
-</ul>
+{{!-- </ul> --}}
 
 
 {{#unless articles}}
