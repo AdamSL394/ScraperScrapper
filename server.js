@@ -12,7 +12,7 @@ mongoose.connect(MONGODB_URI,{ useNewUrlParser: true });
 
 var db = require("./models")
 
-var PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT || 3001;
 
 
 var app = express();
@@ -37,11 +37,16 @@ app.get("/scrape", function (req, res) {
 
     var $ = cheerio.load(response.data);
 
+    // console.log("%%%%%WSDGSDBERERH#$YW#RBNAERHwrgwegweg$T$", response.data)
+
     $('h3, #video-title').each(function (i, element) {
 
 
       var result = {};
 
+      console.log("¬¬¬¬¬¬π¬π¬˚π˚ˆø˙©¥˙√∆©çƒ©˙ç∂¥®∂¥†ç∂˙©ç∆˙µ∆˚",element)
+      
+      result.image = $(this).children("a").attr("src");
       result.link = $(this).children("a").attr("href");
       result.text = $(this).children("a").text()
 
@@ -54,7 +59,6 @@ app.get("/scrape", function (req, res) {
         })
     })
     res.json(dbArticles);
-    //res.send(dbArticles)
   });
 });
 

@@ -5,15 +5,18 @@
 
 {{> header home=true saved=false}}
 {{!-- <ul> --}}
-    {{#each articles}}
-    {{#unless  this.saved}}
+{{#each articles}}
+{{#unless  this.saved}}
+<div class="container">
     <card class="articleWrap">
-        <p>{{this.text}}</p>
+        <p id="text">{{this.text}}</p>
+        <img src= "{{this.image}}">
         <a href="http://youtube.com{{this.link}}" target="_blank"> View link</a>
         <button class="saved" data-aid={{this._id}}>Save</button>
     </card>
-    {{/unless }}
-    {{/each}}
+</div>
+{{/unless }}
+{{/each}}
 {{!-- </ul> --}}
 
 
@@ -27,29 +30,29 @@
     $("#scrape").on("click", function () {
         $(".databaseInformation").empty();
         $.get("/scrape", function (response) {
-        }) 
+        })
     })
 
 
     $(".saved").on("click", function () {
-            var articleId = $(this).data("aid");
+        var articleId = $(this).data("aid");
 
-            var updateArticle = {
-                saved: true
-            }
-      var self = $(this)
-            $.ajax({
-                method: "PUT",
-                url: "/articles/" + articleId,
-                data: updateArticle,
-                sucess: function (result) {
-                    if (result){
+        var updateArticle = {
+            saved: true
+        }
+        var self = $(this)
+        $.ajax({
+            method: "PUT",
+            url: "/articles/" + articleId,
+            data: updateArticle,
+            sucess: function (result) {
+                if (result) {
                     var parentElm = self.parent(".articleWarp")
                     parentElm.remove();
-                    }
                 }
+            }
         })
     })
 
-    
+
 </script>
